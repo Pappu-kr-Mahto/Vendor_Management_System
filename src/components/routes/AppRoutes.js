@@ -8,6 +8,7 @@ import AddVendor from '../vendor/AddVendor';
 import AllPurchaseOrders from '../purchase_order/AllPurchaseOrders';
 import CreatePurchaseOrder from '../purchase_order/CreatePurchaseOrder';
 import UpdateVendor from '../vendor/UpdateVendor';
+import AcknowledgeOrder from '../purchase_order/AcknowledgeOrder';
 const AppRoutes = (props) => {
     const {loginStatus, setLoginStatus } = props 
   return (
@@ -22,6 +23,7 @@ const AppRoutes = (props) => {
             <Route exact path ='/vendors/update/:vendor_code' element={<UpdateVendor/>} />
             <Route exact path ='/purchaseorders' element={<AllPurchaseOrders/>} />
             <Route exact path ='/purchaseorders/add' element={<CreatePurchaseOrder/>} />
+            <Route exact path ='/purchaseorders/acknowldege' element={<AcknowledgeOrder/>} />
       </Routes>
     </>
   );

@@ -17,7 +17,7 @@ const AllVendors = () => {
     }
     useEffect(() => {
         getAllVendrosDetails()
-    });
+    },[]);
 
 
     const handleVendorDelete = async (vendor_code) => {
@@ -75,7 +75,8 @@ const AllVendors = () => {
                     }
                 </tbody>
             </table >
-
+            
+            {/*  Modal  */}
             <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog  modal-lg modal-dialog-centered modal-dialog-scrollable">
                     <div className="modal-content">
