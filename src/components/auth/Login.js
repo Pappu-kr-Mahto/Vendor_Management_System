@@ -29,8 +29,7 @@ const Login = (props) => {
     const handleLogin = async (e) =>{
         e.preventDefault();
 
-        const baseURL = "http://localhost:8000"
-            const URL = `${baseURL}/api/login/`
+            const URL = `${process.env.REACT_APP_API_URL}/api/login/`
 
             const response = await fetch(URL,{
                     method:"POST",

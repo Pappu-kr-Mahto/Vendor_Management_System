@@ -22,8 +22,7 @@ const Register = () => {
     const handleSubmit = async (e) =>{
         e.preventDefault();
 
-        const baseURL = "http://localhost:8000"
-            const URL = `${baseURL}/api/signup/`
+            const URL = `${process.env.REACT_APP_API_URL}/api/signup/`
 
             const response = await fetch(URL,{
                     method:"POST",
