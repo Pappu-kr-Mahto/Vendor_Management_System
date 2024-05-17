@@ -47,7 +47,7 @@ const UpdateVendor = () => {
     }
     useEffect(() => {
         getVendorDetails()
-    });
+    },[]);
     return (
         <div>
             <h2 className='mt-3'>Update Vendor Details </h2>

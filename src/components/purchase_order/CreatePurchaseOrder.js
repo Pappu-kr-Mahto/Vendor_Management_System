@@ -44,14 +44,14 @@ const CreatePurchaseOrder = () => {
   }, []);
   return (
     <div>
-      <h2 className='my-3'>Create Purchase Orders</h2>
-      <div className='col-7 m-auto p-4' style={{ border: "1px solid gray" }}>
+      <h2 className='my-4'>Create Purchase Orders</h2>
+      <div className='col-8 m-auto p-4' style={{ border: "1px solid gray" }}>
         <Formik
           enableReinitialize={true}
           initialValues={{ 'items': items, 'vendor': '' }}
           onSubmit={(values) => {
             if (values.items.length === 0) {
-              alert("Add atleast 1 to to proceed.")
+              alert("Add atleast 1 item to proceed.")
             }
             const data = { items: {}, quantity: 0, vendor: "" };
             values.items.map((item) => {
@@ -73,7 +73,7 @@ const CreatePurchaseOrder = () => {
         >
           {({ values }) => (
             <Form>
-              <label htmlFor="name"> <b> <u> Enter Items Details</u> </b></label><br />
+              <label htmlFor="name" className='mb-2'> <b> <u> Enter Items Details</u> </b></label><br />
               <FieldArray
                 name="items"
                 render={arrayHelpers => (
