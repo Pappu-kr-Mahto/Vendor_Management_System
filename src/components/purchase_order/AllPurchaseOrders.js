@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
+import { Formik, Field, Form, FieldArray } from 'formik'
+import { useNavigate } from 'react-router-dom';
 const AllPurchaseOrders = () => {
+    const navigate = useNavigate()
 
     const [purchaseOrders, setPurchaseOrders] = useState('');
-    const [modalData, setModalData] = useState({ po_number: "", items: {} });
-
-    // const [statusPending, setStatusPending] = useState(true);
-
+    const [modalData, setModalData] = useState({ po_number: "", items: {}, order_date: "", vendor: "", status: "" });
+    const [refresh, setRefresh] = useState(false);
+    const [orderStatus, setOrderStatus] = useState("select")
+    const [orderStatusId, setOrderStatusId] = useState(0)
     const getAllPurchaseOrders = async () => {
         const URL = `${process.env.REACT_APP_API_URL}/api/purchase_orders/`
         const response = await fetch(URL, {
@@ -22,7 +24,7 @@ const AllPurchaseOrders = () => {
     }
     useEffect(() => {
         getAllPurchaseOrders()
-    }, []);
+    }, [refresh]);
 
     const handlePurchaseOrderDelete = async (po_number) => {
         const val = window.confirm("Sure you want to delete the ORDER !")
@@ -48,6 +50,32 @@ const AllPurchaseOrders = () => {
         }
     }
 
+    const handleSetStatusId = (id) => {
+        setOrderStatusId(id)
+    }
+
+    const handleStatusChange =async (data) => {
+        setOrderStatus("")
+        console.log(data)
+        const URL = `${process.env.REACT_APP_API_URL}/api/purchase_orders/${orderStatusId}/`
+        const response = await fetch(URL, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${window.localStorage.getItem('token')}`
+            },
+            body:JSON.stringify(data),
+        });
+        const result = await response.json();
+        console.log(result)
+        if (result['success']) {
+            setRefresh(!refresh)
+            navigate("/purchaseorders")
+        }
+        else{
+            alert("Something went Wrong! Please try again.")
+        }
+    }
     return (
         <>
             <h2 className='mt-3'>All Purchase Orders</h2>
@@ -72,7 +100,7 @@ const AllPurchaseOrders = () => {
                                         <td>{order.order_date}</td>
 
                                         {
-                                            order.status === "pending" ? <td> <button className='btn btn-sm btn-warning' data-bs-toggle="tooltip" data-bs-placement="top" title="Change Status">{order.status}</button></td>
+                                            order.status === "pending" ? <td data-bs-toggle="tooltip" data-bs-placement="top" title="Change Status"> <button type='button' data-bs-toggle="modal" data-bs-target="#exampleModal2" className='btn btn-sm btn-warning' onClick={() => handleSetStatusId(order.po_number)} >{order.status}</button></td>
                                                 :
                                                 <>
                                                     {
@@ -88,7 +116,7 @@ const AllPurchaseOrders = () => {
                                                 <button to={`/purchaseorders/update/${order.po_number}`} className='btn btn-sm btn-secondary mx-2' disabled
                                                 >Edit</button>
                                                 :
-                                                <Link to={`/purchaseorders/update/${order.po_number}`} className='btn btn-sm btn-outline-secondary mx-2' 
+                                                <Link to={`/purchaseorders/update/${order.po_number}`} className='btn btn-sm btn-outline-secondary mx-2'
                                                 >Edit</Link>
                                             }
                                             <button className='btn btn-sm btn-outline-danger' onClick={() => handlePurchaseOrderDelete(order.po_number)}>Delete</button>
@@ -96,7 +124,7 @@ const AllPurchaseOrders = () => {
                                     </tr>
                                 )
                             })
-                            : <tr className='mt-5 text-center'><td className='text-center'> No Purchase Records </td></tr>
+                            : <tr className='mt-5 text-center'><td colSpan={5} className='text-center'> No Purchase Records </td></tr>
                     }
                 </tbody>
             </table >
@@ -164,6 +192,45 @@ const AllPurchaseOrders = () => {
                     </div>
                 </div>
             }
+
+            {/* Modal to Change the status of the of Purchase Order */}
+            <div className="modal fade" id="exampleModal2" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLabel">Purchase Order ID - {orderStatusId} </h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <Formik
+                            enableReinitialize={true}
+                            initialValues={{ "status": orderStatus }}
+                            onSubmit={(values) => {
+                                let val = window.confirm("Sure you want to change the status.")
+                                if(val){
+                                    handleStatusChange(values)
+                                }
+                            }}
+                        >
+                            <Form>
+                                <div className="modal-body">
+                                    <label className="form-label mx-2">Change Status : </label>
+                                    <Field name="status" as="select" className="form-control mb-4" required >
+                                        <option value="" selected> -- Select --</option>
+                                        <option value="canceled"> Canceled</option>
+                                        <option value="completed"> Completed</option>
+                                    </Field>
+
+                                </div>
+                                <div className="modal-footer m-auto">
+                                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" className="btn btn-primary" data-bs-dismiss="modal">Change</button>
+                                </div>
+                            </Form>
+                        </Formik>
+                    </div>
+                </div>
+            </div>
+
         </>
     );
 }

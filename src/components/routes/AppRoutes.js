@@ -24,7 +24,7 @@ const AppRoutes = (props) => {
             <Route exact path ='/vendors/update/:vendor_code' element={<UpdateVendor/>} />
             <Route exact path ='/purchaseorders' element={<AllPurchaseOrders/>} />
             <Route exact path ='/purchaseorders/add' element={<CreatePurchaseOrder/>} />
-            <Route exact path ='/purchaseorders/acknowldege' element={<AcknowledgeOrder/>} />
+            <Route exact path ='/purchaseorders/acknowledge' element={<AcknowledgeOrder/>} />
             <Route exact path ='/purchaseorders/update/:po_number' element={<UpdatePurchaseOrder/>} />
       </Routes>
     </>
