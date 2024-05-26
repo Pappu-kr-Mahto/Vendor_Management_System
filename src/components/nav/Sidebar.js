@@ -27,7 +27,7 @@ const Sidebar = (props) => {
                                     <Link to="/purchaseorders/acknowledge" className='mb-2 btn btn-outline-secondary'>Acknowledge Order</Link><br/>
                                     <Link to="/purchaseorders" className='mb-2 btn btn-outline-secondary'>List of All Purchase Orders</Link><br/>
                                 </div>}
-                                <Link to="" className="btn nav-link" >Performance Matrix</Link>
+                                <Link to="/performance" className="btn nav-link" >Performance Matrix</Link>
                             </div>
                         </div>
                     </div>
